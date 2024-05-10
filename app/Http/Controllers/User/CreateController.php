@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 // use App\Repositories\EloquentUserRepository;
 use App\Repositories\Contracts\UserRepositoryInterface;
 
+use App\Http\DTOS\AuthUserDTO;
+
+
 class CreateController extends Controller
 {
 
@@ -21,17 +24,34 @@ class CreateController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+/*
         $attributes = [
             'name' => $request->input("name"),
             'email' => $request->input("email"),
             'password' => $request->input("password"),
         ];
+*/
+
+        $name = $request->input("name");
+        $email = $request->input("email");
+        $password = $request->input("password");
+
+        $authUserDTO = new AuthUserDTO();
+        $authUserDTO->setName($name);
+        $authUserDTO->setEmail($email);
+        $authUserDTO->setPassword($password);
+
+        // $this->userRespository->create($name, $email, $password);
+
+
+        $this->userRespository->create($authUserDTO);
+
 
         // User::create($attributes);
         //$user = new EloquentUserRepository();
         //$user->create($attributes);
 
-        $user = $this->userRespository->create($attributes);
+        // $user = $this->userRespository->create($attributes);
 
         return response()->json('Registro insertado!');
     }

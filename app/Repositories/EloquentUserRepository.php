@@ -2,11 +2,10 @@
 
 namespace App\Repositories;
 
-use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Http\DTOS\AuthUserDTO;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
@@ -16,8 +15,12 @@ class EloquentUserRepository implements UserRepositoryInterface
         return $users;
     }
 
-    public function create(array $attributes): void {
-        User::create($attributes);
+    public function create(AuthUserDTO $authUserDTO): void {
+        User::create([
+            'name' => $authUserDTO->getName(),
+            'email' => $authUserDTO->getEmail(),
+            'password' => $authUserDTO->getPassword(),
+        ]);
     }
 
     public function update(array $attributes, int $id): void {
